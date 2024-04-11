@@ -5,12 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainMenuView extends JFrame {
+public class MenuView extends JFrame {
     private JButton newGameButton;
     private JButton highScoresButton;
     private JButton exitGameButton;
 
-    public MainMenuView(){
+    public MenuView(){
         setTitle("Pac-Man");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
