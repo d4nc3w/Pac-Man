@@ -1,5 +1,7 @@
 package Controller;
 
+import View.GameView;
+import View.HighScoresView;
 import View.MenuView;
 
 import java.awt.event.ActionEvent;
@@ -18,14 +20,18 @@ public class MenuController {
     private class NewGameButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e){
-            //...
+            GameView gameView = new GameView();
+            GameController gameController = new GameController(gameView);
+            gameController.startGame();
         }
     }
 
     private class HighScoresButtonListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e){
-            //...
+            HighScoresView highScoresView = new HighScoresView();
+            HighScoresController highScoresController = new HighScoresController(highScoresView);
+            highScoresController.showHighScores();
         }
     }
 
