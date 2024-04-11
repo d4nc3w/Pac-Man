@@ -19,7 +19,7 @@ public class MenuView extends JFrame {
         initiateComponents();
     }
 
-    private void initiateComponents(){
+    private void initiateComponents() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 1));
 
@@ -33,25 +33,16 @@ public class MenuView extends JFrame {
 
         add(panel);
 
-        newGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO: Fire up the Pac-Man game
-            }
-        });
+    }
+    public void addNewGameButtonListener(ActionListener listener) {
+        newGameButton.addActionListener(listener);
+    }
 
-        highScoresButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO: Display high scores
-            }
-        });
+    public void addHighScoresButtonListener(ActionListener listener) {
+        highScoresButton.addActionListener(listener);
+    }
 
-        exitGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+    public void addExitButtonListener(ActionListener listener) {
+        exitGameButton.addActionListener(listener);
     }
 }
