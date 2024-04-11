@@ -12,6 +12,9 @@ public class MenuController {
 
     public MenuController(MenuView view){
         this.view = view;
+    }
+
+    public void start(){
         view.addNewGameButtonListener(new NewGameButtonListener());
         view.addHighScoresButtonListener(new HighScoresButtonListener());
         view.addExitButtonListener(new ExitButtonListener());
