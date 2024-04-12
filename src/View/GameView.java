@@ -12,10 +12,12 @@ public class GameView extends JFrame {
     private int[][] levelData;
     private PacMan pacman;
     private Image offScreenBuffer;
+    private int score;
+    private int lives;
 
     public GameView() {
         setTitle("Pac-Man Game");
-        setSize(SCREEN_SIZE, SCREEN_SIZE);
+        setSize(SCREEN_SIZE, SCREEN_SIZE+40);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -39,7 +41,9 @@ public class GameView extends JFrame {
         g.drawImage(offScreenBuffer, 0, 0, null);
     }
 
-    private void paintOffScreen(Graphics g) {
+    public void paintOffScreen(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, getWidth(), getHeight());
         if (levelData != null) {
             for (int y = 0; y < NUM_OF_BLOCKS; y++) {
                 for (int x = 0; x < NUM_OF_BLOCKS; x++) {
@@ -62,6 +66,32 @@ public class GameView extends JFrame {
                 }
             }
         }
+        //SCORE
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        String scoreText = "Score: " + score;
+        int stringWidth = g.getFontMetrics().stringWidth(scoreText);
+        int x = (getWidth() - stringWidth) / 2;
+        int y = SCREEN_SIZE + 30;
+        g.drawString(scoreText, x, y);
+
+        //HEARTS
+        int heartSize = 40;
+        x = SCREEN_SIZE - 150;
+        y = SCREEN_SIZE + 3;
+        for (int i = 0; i < lives; i++) {
+            ImageIcon heartIcon = new ImageIcon("res/heart.png");
+            g.drawImage(heartIcon.getImage(), x, y, heartSize, heartSize, null);
+            x += heartSize + 5;
+        }
+    }
+
+    public void setScore(int score){
+        this.score = score;
+    }
+
+    public void setHearts(int lives){
+        this.lives = lives;
     }
 
     public void stop(){
