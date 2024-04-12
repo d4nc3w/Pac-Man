@@ -5,7 +5,6 @@ import View.GameView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Timer;
 
 public class GameController implements KeyListener {
     private GameView view;
@@ -15,6 +14,7 @@ public class GameController implements KeyListener {
     private final int[][] levelData;
     private long lastAnimationTime;
     private PacMan pacman;
+    private boolean gameStarted;
 
     public GameController(GameView view){
         this.view = view;
@@ -26,6 +26,8 @@ public class GameController implements KeyListener {
 
     public void startGame() {
         view.setVisible(true);
+        gameStarted = true;
+        view.requestFocus();
     }
 
     private void initVariables() {
@@ -46,6 +48,7 @@ public class GameController implements KeyListener {
         pacman = new PacMan(pacmanX, pacmanY);
         view.setPacman(pacman);
         lastAnimationTime = System.currentTimeMillis();
+        score = 0;
         //TODO: Other variables...
     }
 
@@ -58,33 +61,56 @@ public class GameController implements KeyListener {
         //...
     }
 
-    private void handleInput(int keyCode){
-        switch (keyCode) {
-            case KeyEvent.VK_UP:
-                pacman.setDirection('u');
-                pacman.move('u');
-                break;
-            case KeyEvent.VK_RIGHT:
-                pacman.setDirection('r');
-                pacman.move('r');
-                break;
-            case KeyEvent.VK_DOWN:
-                pacman.setDirection('d');
-                pacman.move('d');
-                break;
-            case KeyEvent.VK_LEFT:
-                pacman.setDirection('l');
-                pacman.move('l');
-                break;
+    private void handleInput(int keyCode) {
+        if (gameStarted) {
+            int oldX = pacman.getX();
+            int oldY = pacman.getY();
+
+            int newX = oldX;
+            int newY = oldY;
+
+            switch (keyCode) {
+                case KeyEvent.VK_UP:
+                    newX = oldX;
+                    newY = oldY - 1;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    newX = oldX + 1;
+                    newY = oldY;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    newX = oldX;
+                    newY = oldY + 1;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    newX = oldX - 1;
+                    newY = oldY;
+                    break;
+            }
+
+            if (canMoveTo(newX, newY)) {
+                pacman.setDirection(getDirectionFromKeyCode(keyCode));
+                pacman.move(getDirectionFromKeyCode(keyCode));
+
+                if (levelData[newY][newX] == 0) {
+                    score++;
+                } else if (levelData[newY][newX] == 2) {
+                    levelData[newY][newX] = 3;
+                }
+                levelData[oldY][oldX] = 2;
+                levelData[newY][newX] = 3;
+
+                //TODO: view.setScore(score);
+                view.repaint();
+            }
         }
     }
 
-    private void gameOver() throws InterruptedException {
-        if(dying == true){
-            if(lives == 0){
-                view.stop();
-            }
+    private boolean canMoveTo(int newX, int newY) {
+        if (newX < 0 || newX >= levelData[0].length || newY < 0 || newY >= levelData.length) {
+            return false;
         }
+        return levelData[newY][newX] != 1;
     }
 
     private void updatePacmanAnimation() {
@@ -97,6 +123,21 @@ public class GameController implements KeyListener {
 
     public PacMan getPacman(){
         return pacman;
+    }
+
+    private char getDirectionFromKeyCode(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                return 'u';
+            case KeyEvent.VK_RIGHT:
+                return 'r';
+            case KeyEvent.VK_DOWN:
+                return 'd';
+            case KeyEvent.VK_LEFT:
+                return 'l';
+            default:
+                return 'r'; // Default to right
+        }
     }
 
     @Override

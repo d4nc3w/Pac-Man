@@ -18,6 +18,7 @@ public class GameView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        getContentPane().setBackground(Color.BLACK);
     }
 
     public void setPacman(PacMan pacman) {
@@ -44,7 +45,7 @@ public class GameView extends JFrame {
                         g.setColor(Color.BLACK);
                         g.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                         g.setColor(Color.WHITE);
-                        g.fillOval(x * BLOCK_SIZE + BLOCK_SIZE / 2, y * BLOCK_SIZE + BLOCK_SIZE / 2,BLOCK_SIZE / 4, BLOCK_SIZE / 4);
+                        g.fillOval(x * BLOCK_SIZE + BLOCK_SIZE / 2, y * BLOCK_SIZE + BLOCK_SIZE / 2, BLOCK_SIZE / 4, BLOCK_SIZE / 4);
                     } else if (blockValue == 3) {
                         ImageIcon pacmanImage = pacman.getImage();
                         g.drawImage(pacmanImage.getImage(), x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
