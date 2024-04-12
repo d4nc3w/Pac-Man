@@ -11,6 +11,7 @@ public class GameView extends JFrame {
     private final int SCREEN_SIZE = NUM_OF_BLOCKS * BLOCK_SIZE;
     private int[][] levelData;
     private PacMan pacman;
+    private Image offScreenBuffer;
 
     public GameView() {
         setTitle("Pac-Man Game");
@@ -18,7 +19,6 @@ public class GameView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        getContentPane().setBackground(Color.BLACK);
     }
 
     public void setPacman(PacMan pacman) {
@@ -30,7 +30,16 @@ public class GameView extends JFrame {
     }
 
     public void paint(Graphics g) {
-        super.paint(g);
+        if (offScreenBuffer == null) {
+            offScreenBuffer = createImage(getWidth(), getHeight());
+        }
+
+        Graphics offScreenGraphics = offScreenBuffer.getGraphics();
+        paintOffScreen(offScreenGraphics);
+        g.drawImage(offScreenBuffer, 0, 0, null);
+    }
+
+    private void paintOffScreen(Graphics g) {
         if (levelData != null) {
             for (int y = 0; y < NUM_OF_BLOCKS; y++) {
                 for (int x = 0; x < NUM_OF_BLOCKS; x++) {

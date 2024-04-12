@@ -15,6 +15,7 @@ public class GameController implements KeyListener {
     private long lastAnimationTime;
     private PacMan pacman;
     private boolean gameStarted;
+    private Thread animationThread;
 
     public GameController(GameView view){
         this.view = view;
@@ -28,6 +29,7 @@ public class GameController implements KeyListener {
         view.setVisible(true);
         gameStarted = true;
         view.requestFocus();
+        startAnimation();
     }
 
     private void initVariables() {
@@ -138,6 +140,24 @@ public class GameController implements KeyListener {
             default:
                 return 'r'; // Default to right
         }
+    }
+
+    private void startAnimation() {
+        animationThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    updatePacmanAnimation();
+                    try {
+                        Thread.sleep(200);
+                        view.repaint();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        animationThread.start();
     }
 
     @Override
