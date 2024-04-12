@@ -1,5 +1,7 @@
 package View;
 
+import Model.PacMan;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +10,7 @@ public class GameView extends JFrame {
     private final int NUM_OF_BLOCKS = 20;
     private final int SCREEN_SIZE = NUM_OF_BLOCKS * BLOCK_SIZE;
     private int[][] levelData;
+    private PacMan pacman;
 
     public GameView() {
         setTitle("Pac-Man Game");
@@ -15,6 +18,10 @@ public class GameView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+    }
+
+    public void setPacman(PacMan pacman) {
+        this.pacman = pacman;
     }
 
     public void passLevelData(int[][] levelData) {
@@ -30,19 +37,24 @@ public class GameView extends JFrame {
                     if (blockValue == 1) {
                         g.setColor(Color.BLUE);
                         g.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                    }
-                    else if (blockValue == 2){
+                    } else if (blockValue == 2) {
                         g.setColor(Color.BLACK);
                         g.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                    }
-                    else if (blockValue == 0){
+                    } else if (blockValue == 0) {
                         g.setColor(Color.BLACK);
                         g.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                         g.setColor(Color.WHITE);
-                        g.fillOval(x * BLOCK_SIZE + BLOCK_SIZE / 2, y * BLOCK_SIZE + BLOCK_SIZE / 2, BLOCK_SIZE / 4, BLOCK_SIZE / 4);
+                        g.fillOval(x * BLOCK_SIZE + BLOCK_SIZE / 2, y * BLOCK_SIZE + BLOCK_SIZE / 2,BLOCK_SIZE / 4, BLOCK_SIZE / 4);
+                    } else if (blockValue == 3) {
+                        ImageIcon pacmanImage = pacman.getImage();
+                        g.drawImage(pacmanImage.getImage(), x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
                     }
                 }
             }
         }
+    }
+
+    public void stop(){
+        //TODO: prompt user if he wants to save his score
     }
 }

@@ -1,9 +1,8 @@
 package Controller;
 
+import Model.PacMan;
 import View.GameView;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Timer;
@@ -13,26 +12,13 @@ public class GameController implements KeyListener {
     private int lives, score;
     private boolean gameOver;
     private boolean dying = false;
-
-    private final int BLOCK_SIZE = 20;
-    private final int NUM_OF_BLOCKS = 30;
-    private final int SCREEN_SIZE = NUM_OF_BLOCKS * BLOCK_SIZE;
-    private final int MAX_GHOSTS = 8;
-    private final int PACMAN_SPEED = 6;
-    private int NUM_OF_GHOSTS = 6;
-
-    private int[] dx, dy;
-    private int[] ghost_x, ghost_y, ghost_dx, ghost_dy, ghostSpeed;
-    private int pacman_x, pacman_y, pacman_dx, pacman_dy;
-    private int req_dx, req_dy;
-    private final int validSpeeds[] = {1,2,3,4,6,8};
-    private final int maxSpeed = 6;
-    private int currentSpeed = 3;
-    private Timer timer;
-    private final int[][] levelData = LevelController.getRandomLevel();
+    private final int[][] levelData;
+    private long lastAnimationTime;
+    private PacMan pacman;
 
     public GameController(GameView view){
         this.view = view;
+        this.levelData = LevelController.getRandomLevel();
         view.passLevelData(levelData);
         view.addKeyListener(this);
         initVariables();
@@ -42,13 +28,27 @@ public class GameController implements KeyListener {
         view.setVisible(true);
     }
 
-    private void initVariables(){
+    private void initVariables() {
         lives = 3;
         score = 0;
         gameOver = false;
-
+        int pacmanX = -1;
+        int pacmanY = -1;
+        for (int y = 0; y < levelData.length; y++) {
+            for (int x = 0; x < levelData[y].length; x++) {
+                if (levelData[y][x] == 3) {
+                    pacmanX = x;
+                    pacmanY = y;
+                    break;
+                }
+            }
+        }
+        pacman = new PacMan(pacmanX, pacmanY);
+        view.setPacman(pacman);
+        lastAnimationTime = System.currentTimeMillis();
         //TODO: Other variables...
     }
+
 
     public void updateGameState(){
         //...
@@ -59,11 +59,44 @@ public class GameController implements KeyListener {
     }
 
     private void handleInput(int keyCode){
-        //...
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                pacman.setDirection('u');
+                pacman.move('u');
+                break;
+            case KeyEvent.VK_RIGHT:
+                pacman.setDirection('r');
+                pacman.move('r');
+                break;
+            case KeyEvent.VK_DOWN:
+                pacman.setDirection('d');
+                pacman.move('d');
+                break;
+            case KeyEvent.VK_LEFT:
+                pacman.setDirection('l');
+                pacman.move('l');
+                break;
+        }
     }
 
-    private void gameOver(){
-        //...
+    private void gameOver() throws InterruptedException {
+        if(dying == true){
+            if(lives == 0){
+                view.stop();
+            }
+        }
+    }
+
+    private void updatePacmanAnimation() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastAnimationTime >= pacman.getAnimationDelay()) {
+            pacman.toggleMouth();
+            lastAnimationTime = currentTime;
+        }
+    }
+
+    public PacMan getPacman(){
+        return pacman;
     }
 
     @Override
@@ -82,3 +115,4 @@ public class GameController implements KeyListener {
         //NOT USED
     }
 }
+
