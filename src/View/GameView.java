@@ -1,5 +1,6 @@
 package View;
 
+import Model.Ghost;
 import Model.PacMan;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class GameView extends JFrame {
     private Image offScreenBuffer;
     private int score;
     private int lives;
+    private Ghost[] ghosts;
 
     public GameView() {
         setTitle("Pac-Man Game");
@@ -21,6 +23,10 @@ public class GameView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        ghosts = new Ghost[4];
+        for(int i = 0; i < 4; i++){
+            ghosts[i] = new Ghost(0, 0);
+        }
     }
 
     public void setPacman(PacMan pacman) {
@@ -62,6 +68,9 @@ public class GameView extends JFrame {
                     } else if (blockValue == 3) {
                         ImageIcon pacmanImage = pacman.getImage();
                         g.drawImage(pacmanImage.getImage(), x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+                    } else if (blockValue == 4){
+                        ImageIcon ghostImage = ghosts[0].getImages()[0];
+                        g.drawImage(ghostImage.getImage(), x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
                     }
                 }
             }
